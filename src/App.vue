@@ -5,12 +5,11 @@ import SmallIcon from './components/icons/smallIcon.vue';
 
 import firebaseConfig from "../firebaseInit";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs,
-         addDoc } from "firebase/firestore";
+import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore'
 </script>
 
 <script>
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig)
 const fs = getFirestore(app)
 export default {
   data() {
@@ -32,26 +31,33 @@ export default {
     })
 
     this.getResponses().then((responses) => {
-      const responses_groups = this.notifications.map(n => {
-        const responses_in = responses.filter(resp => resp.response_type_id == 'rkRK3v2aW8jEBrA2ZvLa' && resp.notification_id == n.id)
-        const subscriber_ids_in = responses_in.map(r => {
+      const responses_groups = this.notifications.map((n) => {
+        const responses_in = responses.filter(
+          (resp) => resp.response_type_id == 'rkRK3v2aW8jEBrA2ZvLa' && resp.notification_id == n.id
+        )
+        const subscriber_ids_in = responses_in.map((r) => {
           return r.subscriber_id
         })
-        const responses_out = responses.filter(resp => resp.response_type_id == 'Tg7XLemrnn5BKc33MvrQ' && resp.notification_id == n.id)
-        const subscriber_ids_out = responses_out.map(r => {
+        const responses_out = responses.filter(
+          (resp) => resp.response_type_id == 'Tg7XLemrnn5BKc33MvrQ' && resp.notification_id == n.id
+        )
+        const subscriber_ids_out = responses_out.map((r) => {
           return r.subscriber_id
         })
-        const subscribers_in = this.subscribers.filter(s => subscriber_ids_in.includes(s.id))
-        const subscribers_out = this.subscribers.filter(s => subscriber_ids_out.includes(s.id))
+        const subscribers_in = this.subscribers.filter((s) => subscriber_ids_in.includes(s.id))
+        const subscribers_out = this.subscribers.filter((s) => subscriber_ids_out.includes(s.id))
 
-        const subscribers_in_out = [...subscribers_in.map(d => {
-          return {...d, in_out: 'IN'}
-        }), ...subscribers_out.map(d => {
-          return {...d, in_out: 'OUT'}
-        })]
+        const subscribers_in_out = [
+          ...subscribers_in.map((d) => {
+            return { ...d, in_out: 'IN' }
+          }),
+          ...subscribers_out.map((d) => {
+            return { ...d, in_out: 'OUT' }
+          })
+        ]
         return {
           notification: n,
-          subscribers_in_out: subscribers_in_out,
+          subscribers_in_out: subscribers_in_out
         }
       })
       this.responses = responses
@@ -60,48 +66,54 @@ export default {
   },
   methods: {
     async getNotifications() {
-      return this.getDocs("notifications")
+      return this.getDocs('notifications')
     },
     async getSubscribers() {
-      return this.getDocs("subscribers")
+      return this.getDocs('subscribers')
     },
     async getResponses() {
-      return this.getDocs("responses")
+      return this.getDocs('responses')
     },
     async getDocs(collection_id) {
       const collection_ref = collection(fs, collection_id)
       const docs = []
       await getDocs(collection_ref).then((snapshot) => {
-        snapshot.docs.forEach(d => {
-          docs.push({id: d.id, ...d.data()})
+        snapshot.docs.forEach((d) => {
+          docs.push({ id: d.id, ...d.data() })
         })
       })
       return docs
     },
     async acceptChallenge(notification_id) {
-      const collection_ref = collection(fs, "responses")
-      const response = {'timestamp': this.getCurrentTimestamp(),
-                        'notification_id': notification_id,
-                        'subscriber_id': this.selected_subscriber_id,
-                        'response_type_id': 'rkRK3v2aW8jEBrA2ZvLa'}
+      const collection_ref = collection(fs, 'responses')
+      const response = {
+        timestamp: this.getCurrentTimestamp(),
+        notification_id: notification_id,
+        subscriber_id: this.selected_subscriber_id,
+        response_type_id: 'rkRK3v2aW8jEBrA2ZvLa'
+      }
       await addDoc(collection_ref, response)
       window.location.reload()
     },
     async rejectChallenge(notification_id) {
-      const collection_ref = collection(fs, "responses")
-      const response = {'timestamp': this.getCurrentTimestamp(),
-                        'notification_id': notification_id,
-                        'subscriber_id': this.selected_subscriber_id,
-                        'response_type_id': 'Tg7XLemrnn5BKc33MvrQ'}
+      const collection_ref = collection(fs, 'responses')
+      const response = {
+        timestamp: this.getCurrentTimestamp(),
+        notification_id: notification_id,
+        subscriber_id: this.selected_subscriber_id,
+        response_type_id: 'Tg7XLemrnn5BKc33MvrQ'
+      }
 
-
-      const matches = this.responses.filter(r => r.notification_id == notification_id &&
-                                                 r.subscriber_id == this.selected_subscriber_id &&
-                                                 r.response_type_id == 'Tg7XLemrnn5BKc33MvrQ')
+      const matches = this.responses.filter(
+        (r) =>
+          r.notification_id == notification_id &&
+          r.subscriber_id == this.selected_subscriber_id &&
+          r.response_type_id == 'Tg7XLemrnn5BKc33MvrQ'
+      )
       if (matches.length == 0) {
         await addDoc(collection_ref, response)
       }
-      this.notifications = this.notifications.filter(n => n.id != notification_id)
+      this.notifications = this.notifications.filter((n) => n.id != notification_id)
     },
     getCurrentTimestamp() {
       return new Date()
@@ -111,8 +123,40 @@ export default {
 </script>
 
 <template>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <SmallIcon class="brand-icon" />
+        One2Line
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarScroll"
+        aria-controls="navbarScroll"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="ms-auto"></div>
+      <div class="collapse navbar-collapse me-auto" id="navbarScroll">
+        <form class="d-flex" role="search">
+          <select v-model="selected_subscriber_id" class="form-control">
+            <option :value="subscriber.id" v-for="subscriber in subscribers">
+              {{ subscriber.first_name }} {{ subscriber.last_name }}
+            </option>
+          </select>
+          <button class="btn btn-outline-success" type="submit">Login</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
   <main>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <!-- <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container">
         <a class="navbar-brand" href="#">
           <SmallIcon class="brand-icon" />
@@ -129,40 +173,77 @@ export default {
         </div>
       </div>
     </nav>
+  -->
 
     <div class="container mt-3">
       <LineChart />
     </div>
 
-    <div class="p-2">
-      <Notification v-for="notification in notifications"
-        class="notification" :notification=notification
-        @rejectChallenge="rejectChallenge"
-        @acceptChallenge="acceptChallenge" />
-    </div>
+      <div class="container text-center">
+        <div class="row">
+          <Notification
+            v-for="notification in notifications"
+            class="notification"
+            :notification="notification"
+            @rejectChallenge="rejectChallenge"
+            @acceptChallenge="acceptChallenge"
+          />
+        </div>
+      </div>
 
-    <div class="container">
-      <div v-for="responses_group in responses_groups">
-        <h3>Message: {{ responses_group.notification.msg }}</h3>
-        <table class="table" v-if="responses_group.subscribers_in_out.length > 0">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>City</th>
-              <th>IN/OUT</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="subscriber in responses_group.subscribers_in_out">
-              <td>{{ subscriber.first_name }} {{ subscriber.last_name }}</td>
-              <td>{{ subscriber.city_name }}</td>
-              <td>{{ subscriber.in_out }}</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="container">
+        <div v-for="responses_group in responses_groups">
+          <h3>Message: {{ responses_group.notification.msg }}</h3>
+          <table class="table" v-if="responses_group.subscribers_in_out.length > 0">
+            <thead>
+              <tr class="table-info">
+                <th>Name</th>
+                <th>City</th>
+                <th>IN/OUT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="subscriber in responses_group.subscribers_in_out">
+                <td>{{ subscriber.first_name }} {{ subscriber.last_name }}</td>
+                <td>{{ subscriber.city_name }}</td>
+                <td>{{ subscriber.in_out }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="table">
+            <thead class="table-info">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Handle</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td colspan="2">Larry the Bird</td>
+                <td>@twitter</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-</main>
+  </main>
 </template>
 
 <style>
