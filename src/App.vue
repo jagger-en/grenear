@@ -1,13 +1,12 @@
 <script setup>
 import Notification from './components/Notification.vue'
-import Chart from './components/Chart.vue'
 import LineChart from './components/LineChart.vue'
 import SmallIcon from './components/icons/smallIcon.vue';
 
 import firebaseConfig from "../firebaseInit";
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs,
-         addDoc, deleteDoc, doc } from "firebase/firestore";
+         addDoc } from "firebase/firestore";
 </script>
 
 <script>

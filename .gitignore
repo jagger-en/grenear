@@ -29,3 +29,4 @@ coverage
 
 firebaseInit.js
 .firebase
+api_key.js
