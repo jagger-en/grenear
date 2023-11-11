@@ -15,3 +15,68 @@ body {
 .col {
   margin: 0 2%;
 }
+
+.go-for-it-contents {
+    background-color: white;
+    border-color: #e1e1e1;
+    border-style: solid;
+    border-width: 0.08em;
+    padding-top: 1em !important;
+    padding-bottom: 0.9em !important;
+    padding-left: 0.8em !important;
+    padding-right: 0.8em !important;
+}
+
+.no-margin-no-padding {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.no-margin {
+    margin: 0 !important;
+}
+
+.no-padding {
+    padding: 0 !important;
+}
+
+.show-more {
+    text-decoration: none;
+    color: #15121c;
+    background-color: white;
+    padding: 0.5em;
+}
+
+/* color tones */
+
+.tone-grey {
+  background-color: #929292;
+}
+
+.tone-greylight {
+  background-color: #c5c5c5;
+}
+
+.tone-greydark {
+  background-color: #404041;
+}
+
+.tone-pink {
+  background-color: #fa5858;
+}
+
+.tone-pinklight {
+  background-color: #fd9897;
+}
+
+.tone-green {
+  background-color: #57eb82;
+}
+
+.tone-greenlight {
+  background-color: #9ff4b7;
+}
+
+.tone-black {
+  background-color: #15121c;
+}

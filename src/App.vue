@@ -172,18 +172,156 @@ export default {
       </div>
 
 
-      <div class="go-for-it">
+      <div class="go-for-it border-rounded mb-3 no-padding">
         <div class="go-for-it-header">
           <div>Go for it!</div>
           <div class="plus-icon-wrapper" @click="toggleGoForIt()">
             <PlusIcon class="plus-icon" />
           </div>
         </div>
-        <div v-if="goForItShown" class="go-for-it-contents">
-          TODO: Show table here
+        <div v-if="goForItShown" class="go-for-it-contents border-rounded">
+
+          <div class="card" style="font-size: 0.9em; margin-bottom:1em;">
+            <div class="card-body" style="padding: 0.7em !important;">
+              <div class="row align-items-center">
+                <div class="col-5">
+                  <div class="row">
+                    <p class="card-title no-margin">Electric device</p>
+                  </div>
+                  <div class="row">
+                    <p class="card-text text-body-secondary">Wattage</p>
+                  </div>
+                </div>
+                <div class="col-7">
+                  <div class="row">
+                    <div class="col no-margin-no-padding">
+                    </div>
+                    <div class="col-5 no-padding">
+                      <div class="input-group align-items-center">
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="min"
+                          aria-label="minute"
+                          aria-describedby="basic-addon1"
+                        />
+                      </div>
+                    </div>
+                    <div class="col no-margin-no-padding">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="font-size: 0.9em; margin-bottom:2%;">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-5">
+                  <div class="row">
+                    <p class="card-title no-margin">Electric device</p>
+                  </div>
+                  <div class="row">
+                    <p class="card-text text-body-secondary">Wattage</p>
+                  </div>
+                </div>
+                <div class="col-7">
+                  <div class="row">
+                    <div class="col no-margin-no-padding">
+                    </div>
+                    <div class="col-5 no-padding">
+                      <div class="input-group align-items-center">
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="min"
+                          aria-label="minute"
+                          aria-describedby="basic-addon1"
+                        />
+                      </div>
+                    </div>
+                    <div class="col no-margin-no-padding">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center">
+              <a class="simple-text mt-3 show-more" href="#">Show more</a>
+          </div>
+
         </div>
       </div>
 
+      <div class="row" style="margin: 1% 0;">
+          <div class="col-8 no-padding">
+              <p class="simple-text mt-3">By joining the challenge you can save</p>
+          </div>
+          <div class="col simple-text mt-3" style="padding-right: 0;">
+              {counter} euros
+          </div>
+      </div>
+
+      <div class="row align-items-center" style="margin: 5% 0;">
+          <div class="col"></div>
+          <button class="col-6 btn tone-green simple-text">JOIN THE CHALLENGE!</button>
+          <div class="col"></div>
+      </div>
+
+
+      <div class="row">
+          <div class="col-5" style="padding-right: 0; margin-right: 1em !important;">
+            <div class="card">
+              <div class="card-body text-center">
+                <p class="card-title">{total_joined}</p>
+                <p class="card-text simple-text">people have already joined</p>
+              </div>
+            </div>
+          </div>
+          <div class="col no-margin-no-padding">
+            <div class="card">
+              <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                    </div>
+                    <div class="col">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="37" aria-valuemin="0" aria-valuemax="100">
+                      <div class="progress-bar tone-green" style="width: 37%"></div>
+                    </div>
+              </div>
+              </div>
+            </div>
+          </div>
+      </div>
+
+      <!-- Button trigger modal -->
+      <button type="button" class="btn tone-green" data-bs-toggle="modal" data-bs-target="#exampleModal">TODO event trigger by timer</button>
+
+      <!-- Modal -->
+
+      <div class="modal modal-dialog modal-dialog-centered fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              ...
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="container text-center">
         <div class="row">
