@@ -156,28 +156,9 @@ export default {
 
   <main>
     <div class="container-fluid">
-      <!-- <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container">
-        <a class="navbar-brand" href="#">
-          <SmallIcon class="brand-icon" />
-          One2Line
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <label>Logged in as:</label>
-          <select v-model="selected_subscriber_id" class="form-control">
-            <option :value=subscriber.id v-for="subscriber in subscribers">{{ subscriber.first_name }} {{ subscriber.last_name }}</option>
-          </select>
-        </div>
+      <div class="container mt-3">
+        <LineChart />
       </div>
-    </nav>
-  -->
-
-    <div class="container mt-3">
-      <LineChart />
-    </div>
 
       <div class="container text-center">
         <div class="row">
