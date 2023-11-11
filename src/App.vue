@@ -1,5 +1,6 @@
 <script setup>
 import Notification from './components/Notification.vue'
+import SmallIcon from './components/icons/smallIcon.vue';
 
 import firebaseConfig from "../firebaseInit";
 import { initializeApp } from "firebase/app";
@@ -63,11 +64,6 @@ export default {
       })
       return docs
     },
-    async addNotification() {
-      const collection_ref = collection(fs, "notifications")
-      await addDoc(collection_ref, {'msg': 'foo-bar'})
-      window.location.reload()
-    },
     async acceptChallenge(notification_id) {
       const collection_ref = collection(fs, "responses")
       const response = {'timestamp': this.getCurrentTimestamp(),
@@ -91,16 +87,30 @@ export default {
 
 <template>
   <main>
-    <h1>Hello World</h1>
-    <select v-model="selected_subscriber" name="" id="">
-      <option :value=subscriber.id v-for="subscriber in subscribers">{{ subscriber.first_name }} {{ subscriber.last_name }}</option>
-    </select>
-    <div v-for="notification in notifications">
-      <Notification class="notification" :notification=notification
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <SmallIcon class="brand-icon" />
+          One2Line
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <label>Logged in as:</label>
+          <select v-model="selected_subscriber" class="form-control">
+            <option :value=subscriber.id v-for="subscriber in subscribers">{{ subscriber.first_name }} {{ subscriber.last_name }}</option>
+          </select>
+        </div>
+      </div>
+    </nav>
+
+    <div class="p-2">
+      <Notification v-for="notification in notifications"
+        class="notification" :notification=notification
         @deleteRecord="deleteRecord"
         @acceptChallenge="acceptChallenge" />
     </div>
-    <button @click="addNotification()">Add new</button>
 
     <div v-for="responses_group in responses_groups">
       <h3>Message: {{ responses_group.notification.msg }}</h3>
@@ -124,8 +134,16 @@ export default {
 </template>
 
 <style>
-main {
-  padding: 15px 20px;
+.brand-icon {
+  margin-right: 5px;
+}
+
+.brand {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+  font-size: 20px;
 }
 
 .notification {
