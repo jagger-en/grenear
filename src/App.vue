@@ -2,6 +2,7 @@
 import Notification from './components/Notification.vue'
 import LineChart from './components/LineChart.vue'
 import SmallIcon from './components/icons/smallIcon.vue';
+import PlusIcon from './components/icons/plusIcon.vue';
 
 import firebaseConfig from "../firebaseInit";
 import { initializeApp } from "firebase/app";
@@ -19,7 +20,8 @@ export default {
       selected_subscriber_id: '',
       responses: [],
       subscribers: [],
-      todayPretty: '11/11/2023'  // predefined
+      todayPretty: '11/11/2023',  // predefined,
+      goForItShown: false
     }
   },
   mounted() {
@@ -118,6 +120,9 @@ export default {
     },
     getCurrentTimestamp() {
       return new Date()
+    },
+    toggleGoForIt() {
+      this.goForItShown = !this.goForItShown
     }
   }
 }
@@ -155,6 +160,30 @@ export default {
           while red shading highlights its deficiency.
         </div>
       </div>
+
+
+      <div class="how-can-i-help mt-5">
+        <h5>How can I help with the case?</h5>
+        <p class="simple-text">
+          By estimating the time you reduce your electricity consumption
+          during peak hours, we can calculate your contribution to the
+          common goal of sustainable electricity usage!
+        </p>
+      </div>
+
+
+      <div class="go-for-it">
+        <div class="go-for-it-header">
+          <div>Go for it!</div>
+          <div class="plus-icon-wrapper" @click="toggleGoForIt()">
+            <PlusIcon class="plus-icon" />
+          </div>
+        </div>
+        <div v-if="goForItShown" class="go-for-it-contents">
+          TODO: Show table here
+        </div>
+      </div>
+
 
       <div class="container text-center">
         <div class="row">
@@ -194,6 +223,56 @@ export default {
 </template>
 
 <style>
+
+.go-for-it {
+  border-radius: 7px;
+  background: #f2ebfffc;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.go-for-it-header {
+  color: #40007e;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 15px 20px;
+}
+
+.go-for-it-contents {
+  color: #40007e;
+  width: 100%;
+  padding: 15px 20px;
+}
+
+.plus-icon-wrapper {
+  width: 25px;
+  height: 25px;
+  border-radius: 50px;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  cursor: pointer;
+}
+
+.plus-icon-wrapper:hover {
+  background-color: #c2c0c0;
+}
+
+.plus-icon {
+  width: 17px;
+  height: 17px;
+}
+
+.how-can-i-help  {
+  text-align: center;
+}
+
+.how-can-i-help h5 {
+  font-size: 14px;
+}
 
 .simple-text {
   font-size: 12px;
