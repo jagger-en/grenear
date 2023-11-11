@@ -12,10 +12,10 @@ export default {
           required: true,
       },
   },
-  emits: ['deleteRecord', 'acceptChallenge'],
+  emits: ['rejectChallenge', 'acceptChallenge'],
   methods: {
-    deleteRecord() {
-      this.$emit('deleteRecord', 'notifications', this.notification.id)
+    rejectChallenge() {
+      this.$emit('rejectChallenge', this.notification.id)
     },
     acceptChallenge() {
       this.$emit('acceptChallenge', this.notification.id)
@@ -33,7 +33,7 @@ export default {
         <span>One2Line</span>
       </div>
       <div class="header-right">
-        <div @click="deleteRecord()">&times</div>
+        <div @click="rejectChallenge()">&times</div>
       </div>
     </div>
     <div class="title">Call to action</div>
@@ -71,6 +71,7 @@ export default {
   align-items: flex-start;
   align-content: flex-start;
   font-size: 20px;
+  cursor: pointer;
 }
 
 .small-icon {

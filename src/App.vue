@@ -16,7 +16,8 @@ export default {
     return {
       notifications: [],
       responses_groups: [],
-      selected_subscriber: null,
+      selected_subscriber_id: null,
+      responses: [],
       subscribers: []
     }
   },
@@ -35,12 +36,24 @@ export default {
         const subscriber_ids_in = responses_in.map(r => {
           return r.subscriber_id
         })
+        const responses_out = responses.filter(resp => resp.response_type_id == 'Tg7XLemrnn5BKc33MvrQ' && resp.notification_id == n.id)
+        const subscriber_ids_out = responses_out.map(r => {
+          return r.subscriber_id
+        })
         const subscribers_in = this.subscribers.filter(s => subscriber_ids_in.includes(s.id))
+        const subscribers_out = this.subscribers.filter(s => subscriber_ids_out.includes(s.id))
+
+        const subscribers_in_out = [...subscribers_in.map(d => {
+          return {...d, in_out: 'IN'}
+        }), ...subscribers_out.map(d => {
+          return {...d, in_out: 'OUT'}
+        })]
         return {
           notification: n,
-          subscribers_in: subscribers_in
+          subscribers_in_out: subscribers_in_out,
         }
       })
+      this.responses = responses
       this.responses_groups = responses_groups
     })
   },
@@ -68,15 +81,26 @@ export default {
       const collection_ref = collection(fs, "responses")
       const response = {'timestamp': this.getCurrentTimestamp(),
                         'notification_id': notification_id,
-                        'subscriber_id': this.selected_subscriber,
+                        'subscriber_id': this.selected_subscriber_id,
                         'response_type_id': 'rkRK3v2aW8jEBrA2ZvLa'}
       await addDoc(collection_ref, response)
       window.location.reload()
     },
-    async deleteRecord(collection_id, record_id) {
-      const docRef = doc(fs, collection_id, record_id)
-      await deleteDoc(docRef)
-      window.location.reload()
+    async rejectChallenge(notification_id) {
+      const collection_ref = collection(fs, "responses")
+      const response = {'timestamp': this.getCurrentTimestamp(),
+                        'notification_id': notification_id,
+                        'subscriber_id': this.selected_subscriber_id,
+                        'response_type_id': 'Tg7XLemrnn5BKc33MvrQ'}
+
+
+      const matches = this.responses.filter(r => r.notification_id == notification_id &&
+                                                 r.subscriber_id == this.selected_subscriber_id &&
+                                                 r.response_type_id == 'Tg7XLemrnn5BKc33MvrQ')
+      if (matches.length == 0) {
+        await addDoc(collection_ref, response)
+      }
+      this.notifications = this.notifications.filter(n => n.id != notification_id)
     },
     getCurrentTimestamp() {
       return new Date()
@@ -88,7 +112,7 @@ export default {
 <template>
   <main>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container-fluid">
+      <div class="container">
         <a class="navbar-brand" href="#">
           <SmallIcon class="brand-icon" />
           One2Line
@@ -98,7 +122,7 @@ export default {
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <label>Logged in as:</label>
-          <select v-model="selected_subscriber" class="form-control">
+          <select v-model="selected_subscriber_id" class="form-control">
             <option :value=subscriber.id v-for="subscriber in subscribers">{{ subscriber.first_name }} {{ subscriber.last_name }}</option>
           </select>
         </div>
@@ -108,27 +132,30 @@ export default {
     <div class="p-2">
       <Notification v-for="notification in notifications"
         class="notification" :notification=notification
-        @deleteRecord="deleteRecord"
+        @rejectChallenge="rejectChallenge"
         @acceptChallenge="acceptChallenge" />
     </div>
 
-    <div v-for="responses_group in responses_groups">
-      <h3>Message: {{ responses_group.notification.msg }}</h3>
-      <table v-if="responses_group.subscribers_in.length > 0">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>City</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="subscriber in responses_group.subscribers_in">
-            <td>{{ subscriber.first_name }} {{ subscriber.last_name }}</td>
-            <td>{{ subscriber.city_name }}</td>
-          </tr>
-        </tbody>
-      </table>
-
+    <div class="container">
+      <div v-for="responses_group in responses_groups">
+        <h3>Message: {{ responses_group.notification.msg }}</h3>
+        <table class="table" v-if="responses_group.subscribers_in_out.length > 0">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>City</th>
+              <th>IN/OUT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="subscriber in responses_group.subscribers_in_out">
+              <td>{{ subscriber.first_name }} {{ subscriber.last_name }}</td>
+              <td>{{ subscriber.city_name }}</td>
+              <td>{{ subscriber.in_out }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 </main>
 </template>
@@ -148,5 +175,6 @@ export default {
 
 .notification {
   margin-bottom: 7px;
+  max-width: 400px;
 }
 </style>
