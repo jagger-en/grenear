@@ -12,10 +12,13 @@ export default {
           required: true,
       },
   },
-  emits: ['deleteRecord'],
+  emits: ['deleteRecord', 'acceptChallenge'],
   methods: {
-    deleteRecord(notification_id) {
-      this.$emit('deleteRecord', 'notifications', notification_id)
+    deleteRecord() {
+      this.$emit('deleteRecord', 'notifications', this.notification.id)
+    },
+    acceptChallenge() {
+      this.$emit('acceptChallenge', this.notification.id)
     }
   }
 }
@@ -30,11 +33,12 @@ export default {
         <span>One2Line</span>
       </div>
       <div class="header-right">
-        <div @click="deleteRecord(notification.id)">&times</div>
+        <div @click="deleteRecord()">&times</div>
       </div>
     </div>
     <div class="title">Call to action</div>
     <div class="msg">Message: {{ notification.msg }}</div>
+    <button @click="acceptChallenge()">I'm in</button>
   </div>
 </template>
 
