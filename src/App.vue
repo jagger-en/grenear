@@ -38,8 +38,8 @@ export default {
       await addDoc(collection_ref, {'msg': 'foo-bar'})
       window.location.reload()
     },
-    async deleteNotification(notification) {
-      const docRef = doc(fs, 'notifications', notification.id)
+    async deleteRecord(collection_id, record_id) {
+      const docRef = doc(fs, collection_id, record_id)
       await deleteDoc(docRef)
       window.location.reload()
     }
@@ -50,10 +50,20 @@ export default {
 <template>
   <main>
     <h1>Hello World</h1>
-    <li v-for="notification in notifications">
-      {{ notification.msg }} <button @click="deleteNotification(notification)">Del</button>
-    </li>
-    <Notification msg="This is the notification." />
+    <div v-for="notification in notifications">
+      <Notification class="notification" :notification=notification
+        @deleteRecord="deleteRecord" />
+    </div>
     <button @click="addNotification()">Add new</button>
 </main>
 </template>
+
+<style>
+main {
+  padding: 15px 20px;
+}
+
+.notification {
+  margin-bottom: 7px;
+}
+</style>
