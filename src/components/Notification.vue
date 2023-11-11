@@ -3,14 +3,13 @@ import SmallIcon from './icons/smallIcon.vue'
 </script>
 
 <script>
-
 export default {
   name: 'Notification',
   props: {
     notification: {
-          type: Object,
-          required: true,
-      },
+      type: Object,
+      required: true
+    }
   },
   emits: ['rejectChallenge', 'acceptChallenge'],
   methods: {
@@ -22,23 +21,24 @@ export default {
     }
   }
 }
-
 </script>
 
 <template>
-  <div class="notification">
-    <div class="header">
-      <div class="header-left">
-        <SmallIcon class="small-icon" />
-        <span>One2Line</span>
-      </div>
-      <div class="header-right">
-        <div @click="rejectChallenge()">&times</div>
+  <div class="col col-3">
+    <div class="card">
+      <div class="card-header">Call for action!</div>
+      <div class="card-body">
+        <p class="card-text">{{ notification.msg }}</p>
+        <div class="row">
+          <div class="col">
+            <button class="btn btn-success" @click="acceptChallenge()">I'm in</button>
+          </div>
+          <div class="col">
+            <div class="btn btn-danger" @click="rejectChallenge()">Nah!</div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="title">Call to action</div>
-    <div class="msg">Message: {{ notification.msg }}</div>
-    <button @click="acceptChallenge()">I'm in</button>
   </div>
 </template>
 
@@ -82,5 +82,4 @@ export default {
   color: #969191;
   font-weight: 500;
 }
-
 </style>
