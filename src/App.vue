@@ -16,7 +16,7 @@ export default {
     return {
       notifications: [],
       responses_groups: [],
-      selected_subscriber_id: null,
+      selected_subscriber_id: '',
       responses: [],
       subscribers: []
     }
@@ -123,39 +123,23 @@ export default {
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light centering-mobile">
+    <div class="container-mobile">
       <a class="navbar-brand" href="#">
         <SmallIcon class="brand-icon" />
         One2Line
       </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarScroll"
-        aria-controls="navbarScroll"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="ms-auto"></div>
-      <div class="collapse navbar-collapse me-auto" id="navbarScroll">
-        <form class="d-flex" role="search">
-          <select v-model="selected_subscriber_id" class="form-control">
-            <option :value="subscriber.id" v-for="subscriber in subscribers">
-              {{ subscriber.first_name }} {{ subscriber.last_name }}
-            </option>
-          </select>
-          <button class="btn btn-outline-success" type="submit">Login</button>
-        </form>
+      <div class="logged-in-as">
+        <label class="me-2">Logged in as:</label>
+        <select v-model="selected_subscriber_id" class="user-select">
+          <option disabled value="">Please select one</option>
+          <option :value=subscriber.id v-for="subscriber in subscribers">{{ subscriber.first_name }} {{ subscriber.last_name }}</option>
+        </select>
       </div>
     </div>
   </nav>
-
-  <main>
-    <div class="container-fluid">
+  <main class="centering-mobile">
+    <div class="container-mobile">
       <div class="container mt-3">
         <LineChart />
       </div>
@@ -198,6 +182,26 @@ export default {
 </template>
 
 <style>
+
+.container-mobile {
+  width: 320px;
+}
+
+.centering-mobile {
+  display: flex;
+  justify-content: center;
+}
+
+
+.user-select {
+  width: 200px;
+}
+
+.logged-in-as {
+  display: flex;
+  justify-content: space-between;
+}
+
 .brand-icon {
   margin-right: 5px;
 }

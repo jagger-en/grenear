@@ -24,18 +24,16 @@ export default {
 </script>
 
 <template>
-  <div class="col col-3">
-    <div class="card">
-      <div class="card-header">Call for action!</div>
-      <div class="card-body">
-        <p class="card-text">{{ notification.msg }}</p>
-        <div class="row">
-          <div class="col">
-            <button class="btn btn-success" @click="acceptChallenge()">I'm in</button>
-          </div>
-          <div class="col">
-            <div class="btn btn-danger" @click="rejectChallenge()">Nah!</div>
-          </div>
+  <div class="card">
+    <div class="card-header">Call for action!</div>
+    <div class="card-body">
+      <p class="card-text">{{ notification.msg }}</p>
+      <div class="row">
+        <div class="col">
+          <button class="btn btn-success" @click="acceptChallenge()">I'm in</button>
+        </div>
+        <div class="col">
+          <div class="btn btn-danger" @click="rejectChallenge()">Nah!</div>
         </div>
       </div>
     </div>
