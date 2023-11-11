@@ -14,13 +14,19 @@ const app = initializeApp(firebaseConfig)
 const fs = getFirestore(app)
 export default {
   data() {
+    const todayPretty = '2023-11-04' // hardcoded for demo purposes
+    const today = new Date(todayPretty)
+    const tomorrow = new Date(todayPretty)
+    tomorrow.setHours(tomorrow.getHours() + 24)
     return {
       notifications: [],
       responses_groups: [],
       selected_subscriber_id: '',
       responses: [],
       subscribers: [],
-      todayPretty: '11/11/2023',  // predefined,
+      todayPretty,
+      today,
+      tomorrow,
       goForItShown: false
     }
   },
@@ -153,7 +159,7 @@ export default {
           <div>{{ todayPretty }}</div>
         </div>
         <div class="mt-3">
-          <LineChart />
+          <LineChart :today="today" :tomorrow="tomorrow" />
         </div>
         <div class="simple-text mt-3 p-3">
           Green shading indicates sufficient clean energy,

@@ -35,10 +35,22 @@ ChartJS.register(
 export default {
     name: 'LineChart',
     components: { Line },
+    props: {
+        today: {
+            type: Date,
+            required: true
+        },
+        tomorrow: {
+            type: Date,
+            required: true
+        },
+    },
     data() {
+        const start_time = this.formatDateForAPI(this.today)
+        const end_time = this.formatDateForAPI(this.tomorrow)
         return {
-            start_time: '2023-11-11T00:00:00Z',
-            end_time: '2023-11-12T00:00:00Z',
+            start_time,
+            end_time,
             chartData: {
                 labels: [],
                 datasets: [
@@ -72,6 +84,29 @@ export default {
         this.fetchSurplusDeficitData()
     },
     methods: {
+        formatDateForAPI(date) {
+            const year = date.getFullYear()
+            let month = date.getMonth() + 1
+            let day = date.getDate()
+            let hours = date.getHours()
+            let minutes = date.getMinutes()
+            let seconds = date.getSeconds()
+
+
+            month = this.placeZeroInFrontIfLessThan10(month)
+            day = this.placeZeroInFrontIfLessThan10(day)
+            hours = this.placeZeroInFrontIfLessThan10(hours)
+            minutes = this.placeZeroInFrontIfLessThan10(minutes)
+            seconds = this.placeZeroInFrontIfLessThan10(seconds)
+
+            return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`
+        },
+        placeZeroInFrontIfLessThan10(value) {
+            if (parseInt(value) < 10 && parseInt(value) >= 0 && String(value).length == 1) {
+                value = '0' + value
+            }
+            return value
+        },
         createListOfConsecutiveDatesByHours(starting, ending) {
             const start = new Date(starting) // copy the date object
             const end = new Date(ending)
