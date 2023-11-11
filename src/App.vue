@@ -14,6 +14,7 @@ export default {
   data() {
     return {
       notifications: [],
+      responses_groups: [],
       selected_subscriber: null,
       subscribers: []
     }
@@ -26,27 +27,41 @@ export default {
     this.getSubscribers().then((s) => {
       this.subscribers = s
     })
+
+    this.getResponses().then((responses) => {
+      const responses_groups = this.notifications.map(n => {
+        const responses_in = responses.filter(resp => resp.response_type_id == 'rkRK3v2aW8jEBrA2ZvLa' && resp.notification_id == n.id)
+        const subscriber_ids_in = responses_in.map(r => {
+          return r.subscriber_id
+        })
+        const subscribers_in = this.subscribers.filter(s => subscriber_ids_in.includes(s.id))
+        return {
+          notification: n,
+          subscribers_in: subscribers_in
+        }
+      })
+      this.responses_groups = responses_groups
+    })
   },
   methods: {
     async getNotifications() {
-      const collection_ref = collection(fs, "notifications")
-      const notifications = []
-      await getDocs(collection_ref).then((snapshot) => {
-        snapshot.docs.forEach(d => {
-          notifications.push({id: d.id, ...d.data()})
-        })
-      })
-      return notifications
+      return this.getDocs("notifications")
     },
     async getSubscribers() {
-      const collection_ref = collection(fs, "subscribers")
-      const subscribers = []
+      return this.getDocs("subscribers")
+    },
+    async getResponses() {
+      return this.getDocs("responses")
+    },
+    async getDocs(collection_id) {
+      const collection_ref = collection(fs, collection_id)
+      const docs = []
       await getDocs(collection_ref).then((snapshot) => {
         snapshot.docs.forEach(d => {
-          subscribers.push({id: d.id, ...d.data()})
+          docs.push({id: d.id, ...d.data()})
         })
       })
-      return subscribers
+      return docs
     },
     async addNotification() {
       const collection_ref = collection(fs, "notifications")
@@ -86,6 +101,25 @@ export default {
         @acceptChallenge="acceptChallenge" />
     </div>
     <button @click="addNotification()">Add new</button>
+
+    <div v-for="responses_group in responses_groups">
+      <h3>Message: {{ responses_group.notification.msg }}</h3>
+      <table v-if="responses_group.subscribers_in.length > 0">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>City</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="subscriber in responses_group.subscribers_in">
+            <td>{{ subscriber.first_name }} {{ subscriber.last_name }}</td>
+            <td>{{ subscriber.city_name }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
 </main>
 </template>
 
