@@ -1,0 +1,10 @@
+{
+  "hosting": {
+    "site": "one2line",
+    "public": "dist"
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}
