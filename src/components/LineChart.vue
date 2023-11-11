@@ -1,6 +1,8 @@
 <template>
-    <div>
-        <Line id="my-chart-id" :options="chartOptions" :data="chartData" />
+    <div class="chart-wrapper">
+        <div class="chart-scroll">
+            <Line id="my-chart-id" :options="chartOptions" :data="chartData" />
+        </div>
     </div>
 </template>
 
@@ -53,7 +55,11 @@ export default {
                 ]
             },
             chartOptions: {
-                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                },
                 elements: {
                     point: {
                         radius: 0
@@ -66,12 +72,37 @@ export default {
         this.fetchSurplusDeficitData()
     },
     methods: {
+        createListOfConsecutiveDatesByHours(starting, ending) {
+            const start = new Date(starting) // copy the date object
+            const end = new Date(ending)
+            const hours_diff = (end - start) / (60 * 60 * 1000)
+            const listOfDates = [new Date(start)]
+            for (var i = 1; i <= hours_diff; i++) {
+                const date = start.setHours(start.getHours() + 1)
+                listOfDates.push(new Date(date))
+            }
+            return listOfDates
+        },
         fetchSurplusDeficitData() {
             fetch(`https://api.fingrid.fi/v1/variable/186/events/json?start_time=${this.start_time}&end_time=${this.end_time}`).then((response) => {
                 response.json().then((data) => {
                     if (response.ok) {
-                        const chart_labels = data.map(d => d.start_time)
-                        const chart_data = data.map(d => d.value)
+                        const times = data.map(d => d.start_time) // ignore end_time
+
+                        const starting_time = times[0]
+                        const ending_time = times[times.length-1]
+
+                        const dates = this.createListOfConsecutiveDatesByHours(starting_time, ending_time)
+
+                        const chart_data = dates.map(dt => {
+                            const next_dt = new Date(dt)
+                            next_dt.setHours(next_dt.getHours() + 1)
+
+                            const matches = data.filter(d => new Date(d.start_time) <= next_dt && new Date(d.start_time) >= dt)
+                            const total_for_hour = matches.reduce((acc, d) => acc + d.value, 0)
+                            return total_for_hour
+                        })
+                        const chart_labels = dates.map(d => d.getHours())
                         this.chartData = {
                             labels: chart_labels,
                             datasets: [
@@ -98,5 +129,15 @@ export default {
 <style>
 #my-chart-id {
     background: #fff;
+    width: 2000px;
+}
+
+.chart-wrapper {
+    overflow: auto;
+}
+
+.chart-scroll {
+    width: fit-content;
+    height: 200px;
 }
 </style>

@@ -148,14 +148,14 @@ export default {
     <div class="container-mobile">
 
       <div class="forecast border-rounded mb-3">
-        <div class="forecast-header">
+        <div class="forecast-header p-3">
           <div class="forecast-header-text">CLEAN ENERGY FORECAST</div>
           <div>{{ todayPretty }}</div>
         </div>
-        <div class="container mt-3">
+        <div class="mt-3">
           <LineChart />
         </div>
-        <div class="simple-text mt-3">
+        <div class="simple-text mt-3 p-3">
           Green shading indicates sufficient clean energy,
           while red shading highlights its deficiency.
         </div>
@@ -421,7 +421,7 @@ export default {
 .border-rounded {
   border: 1px solid #d4d4d4b7;
   border-radius: 7px;
-  padding: 7px 10px;
+  /* padding: 7px 10px; */
   box-shadow: 0px 5px 5px 0px #0000002d;
 }
 
