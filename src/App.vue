@@ -5,7 +5,7 @@ import SmallIcon from './components/icons/smallIcon.vue';
 
 import firebaseConfig from "../firebaseInit";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore'
+import { getFirestore, collection, getDocs, addDoc } from 'firebase/firestore'
 </script>
 
 <script>
@@ -18,7 +18,8 @@ export default {
       responses_groups: [],
       selected_subscriber_id: '',
       responses: [],
-      subscribers: []
+      subscribers: [],
+      todayPretty: '11/11/2023'  // predefined
     }
   },
   mounted() {
@@ -138,10 +139,21 @@ export default {
       </div>
     </div>
   </nav>
-  <main class="centering-mobile">
+  <main class="centering-mobile mt-5">
     <div class="container-mobile">
-      <div class="container mt-3">
-        <LineChart />
+
+      <div class="forecast border-rounded mb-3">
+        <div class="forecast-header">
+          <div class="forecast-header-text">CLEAN ENERGY FORECAST</div>
+          <div>{{ todayPretty }}</div>
+        </div>
+        <div class="container mt-3">
+          <LineChart />
+        </div>
+        <div class="simple-text mt-3">
+          Green shading indicates sufficient clean energy,
+          while red shading highlights its deficiency.
+        </div>
       </div>
 
       <div class="container text-center">
@@ -182,6 +194,31 @@ export default {
 </template>
 
 <style>
+
+.simple-text {
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: 400;
+}
+
+.border-rounded {
+  border: 1px solid #d4d4d4b7;
+  border-radius: 7px;
+  padding: 7px 10px;
+  box-shadow: 0px 5px 5px 0px #0000002d;
+}
+
+.forecast-header {
+  font-size: 12px;
+  display: flex;
+  line-height: 15px;
+  justify-content: space-between;
+}
+
+.forecast-header-text {
+  font-weight: 600;
+  width: 140px;
+}
 
 .container-mobile {
   width: 320px;

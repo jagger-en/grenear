@@ -1,15 +1,5 @@
 <template>
     <div>
-        <div class="row mb-2">
-            <div class="col-6">
-                <label>Start time</label>
-                <input v-model="start_time" @change="fetchSurplusDeficitData()" type="text" class="form-control">
-            </div>
-            <div class="col-6">
-                <label>End time</label>
-                <input v-model="end_time" @change="fetchSurplusDeficitData()" type="text" class="form-control">
-            </div>
-        </div>
         <Line id="my-chart-id" :options="chartOptions" :data="chartData" />
     </div>
 </template>
@@ -45,8 +35,8 @@ export default {
     components: { Line },
     data() {
         return {
-            start_time: '2023-11-01T00:00:00Z',
-            end_time: '2023-11-02T00:00:00Z',
+            start_time: '2023-11-11T00:00:00Z',
+            end_time: '2023-11-12T00:00:00Z',
             chartData: {
                 labels: [],
                 datasets: [
@@ -91,8 +81,8 @@ export default {
                                     data: chart_data,
                                     fill: {
                                         target: 'origin',
-                                        above: 'rgb(0,255,0)',
-                                        below: 'rgb(255,0,0)'
+                                        above: '#00ff82',
+                                        below: '#ef555cfc'
                                     }
                                 }
                             ]
