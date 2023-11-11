@@ -1,5 +1,7 @@
 <script setup>
 import Notification from './components/Notification.vue'
+import Chart from './components/Chart.vue'
+import LineChart from './components/LineChart.vue'
 import SmallIcon from './components/icons/smallIcon.vue';
 
 import firebaseConfig from "../firebaseInit";
@@ -128,6 +130,10 @@ export default {
         </div>
       </div>
     </nav>
+
+    <div class="container mt-3">
+      <LineChart />
+    </div>
 
     <div class="p-2">
       <Notification v-for="notification in notifications"
