@@ -34,7 +34,8 @@ export default {
       goForItShown: false,
       total_joined: 1658, // pretend there are lots
       total_watt_hour_saved: 1.76 * 1000000,
-      total_watt_hour_savable: 5.43 * 1000000
+      total_watt_hour_savable: 5.43 * 1000000,
+      showModal: false
     }
   },
   mounted() {
@@ -187,6 +188,12 @@ export default {
       // const totalCost = totals.reduce((acc, t) => acc + t, 0)
       // this.total_watt_hour_saved = this.total_watt_hour_saved + 
       this.total_joined = this.total_joined + 1 // naively increment
+      setTimeout(() => {
+        this.showModal = true
+      }, "2500");
+    },
+    hideModal() {
+      this.showModal = false
     }
   }
 }
@@ -208,6 +215,45 @@ export default {
       </div> -->
     </div>
   </nav>
+
+  <!-- Modal -->
+  <div
+    class="custom-modal"
+    id="exampleModal"
+    v-if="showModal"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content text-center text-justify tone-greenlight">
+        <div class="p-3 modal-body">
+          <div class="row align-items-start">
+            <button
+              type="button"
+              class="btn-close"
+              style="padding-left: 1.75em"
+              @click="hideModal()"
+            ></button>
+          </div>
+          <div class="fs-5 mt-3 tone-text-blue">Congratulations!</div>
+            Together with you have manged to save
+            <div>
+              <span class="tone-text-blue"><b>{{ total_watt_hour_saved / 100000 }} MWh</b></span> of electricity.
+            </div>
+            <div>
+              <span class="tone-text-blue"><b>{{ total_joined }} people</b></span> participated.
+            </div>
+            <div class="earth-img">
+              <img src="../public/mother-earth-day.png">
+            </div>
+
+          <p class="simple-text mt-3">Share this challenge with others!</p>
+          <button class="btn btn-sm btn-primary">Share</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div v-if="showModal" class="shade" @click="hideModal()">
+  </div>
+
   <main class="centering-mobile mt-2">
     <div class="container-mobile">
 
@@ -339,48 +385,8 @@ export default {
       </div>
       </div>
 
-      <!-- Button trigger modal -->
-      <button type="button" class="btn tone-green" data-bs-toggle="modal" data-bs-target="#exampleModal">TODO event trigger by timer</button>
+      <div style="margin-bottom: 200px"></div>
 
-      <!-- Modal -->
-
-      <div
-        class="modal modal-dialog modal-dialog-centered fade"
-        id="exampleModal"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog">
-          <div class="modal-content text-center text-justify tone-greenlight">
-            <div class="modal-body">
-              <div class="row align-items-start">
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                  style="padding-left: 1.75em"
-                ></button>
-              </div>
-              <div class="fs-5 mt-3 tone-text-blue">Congratulations!</div>
-                Together with you have manged to save
-                <div>
-                  <span class="tone-text-blue"><b>{{ total_watt_hour_saved / 100000 }} MWh</b></span> of electricity.
-                </div>
-                <div>
-                  <span class="tone-text-blue"><b>{{ total_joined }} people</b></span> participated.
-                </div>
-                <div class="earth-img">
-                  <img src="../public/mother-earth-day.png">
-                </div>
-
-              <p class="simple-text mt-3">Share this challenge with others!</p>
-              <button class="btn btn-sm btn-primary">Share</button>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <!-- <div class="container text-center">
         <div class="row">
@@ -394,7 +400,7 @@ export default {
         </div>
       </div> -->
 
-      <div class="container">
+      <!-- <div class="container">
         <div v-for="responses_group in responses_groups">
           <h3>Message: {{ responses_group.notification.msg }}</h3>
           <table class="table" v-if="responses_group.subscribers_in_out.length > 0">
@@ -414,12 +420,28 @@ export default {
             </tbody>
           </table>
         </div>
-      </div>
+      </div> -->
     </div>
   </main>
 </template>
 
 <style>
+
+.shade {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: #00000082;
+  z-index: 90;
+  top: 0;
+}
+
+.custom-modal {
+  position: fixed;
+  width: 250px;
+  left: calc(50% - 125px);
+  z-index: 100;
+}
 
 .earth-img {
   display: flex;
