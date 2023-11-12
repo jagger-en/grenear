@@ -43,6 +43,18 @@ body {
     padding: 0.5em;
 }
 
+.card-title.tone-text-blue.fs-4 {
+    margin-bottom: 0;
+}
+
+.padding-1rem {
+    padding: 1rem;
+}
+
+.col.d-flex.no-margin {
+    padding-left: 0;
+}
+
 /* color tones */
 
 .tone-grey {

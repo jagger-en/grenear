@@ -288,7 +288,7 @@ export default {
           </div>
 
           <div class="text-center">
-              <span class="simple-text mt-3 show-more">Show more</span>
+              <span class="simple-text mt-3 show-more tone-text-blue">Show more</span>
           </div>
 
         </div>
@@ -309,33 +309,34 @@ export default {
           <div class="col"></div>
       </div>
 
-
+      <div class="container-fluid">
       <div class="row">
-          <div class="col-5" style="padding-right: 0; margin-right: 1em !important;">
-            <div class="card">
-              <div class="card-body text-center">
-                <p class="card-title">{{ total_joined }}</p>
-                <p class="card-text simple-text">people have already joined</p>
-              </div>
+        <div class="col-5 d-flex">
+          <div class="card flex-fill">
+            <div class="card-body text-center padding-1rem">
+                <p class="card-title tone-text-blue fs-4"><b>{{ total_joined }}</b></p>
+              <p class="card-text simple-text">people have already joined</p>
             </div>
           </div>
-          <div class="col no-margin-no-padding">
-            <div class="card">
-              <div class="card-body">
-                  <div class="watt-save mb-1">
-                    <small>
-                      {{ total_watt_hour_saved / 1000000 }} MWh saved
-                    </small>
-                    <small>
-                      {{ (total_watt_hour_savable - total_watt_hour_saved) / 1000000 }} MWh left
-                    </small>
-                  </div>
-                  <div class="progress" role="progressbar">
-                    <div class="progress-bar tone-green" :style="{width: `${(total_watt_hour_saved / total_watt_hour_savable) * 100}%`}"></div>
-                  </div>
-              </div>
+        </div>
+        <div class="col d-flex no-margin">
+          <div class="card flex-fill">
+            <div class="card-body d-flex flex-column padding-1rem">
+                <div class="watt-save mb-1 tone-text-blue" style="margin-top: 0.5rem; margin-bottom: 0.25rem;">
+                  <small>
+                    {{ total_watt_hour_saved / 1000000 }} MWh saved
+                  </small>
+                  <small>
+                    {{ (total_watt_hour_savable - total_watt_hour_saved) / 1000000 }} MWh left
+                  </small>
+                </div>
+                <div class="progress" role="progressbar" style="margin-bottom: 0.5rem;">
+                  <div class="progress-bar tone-green" :style="{width: `${(total_watt_hour_saved / total_watt_hour_savable) * 100}%`}"></div>
+                </div>
             </div>
           </div>
+        </div>
+      </div>
       </div>
 
       <!-- Button trigger modal -->
