@@ -29,6 +29,8 @@ export default {
       todayPretty,
       today,
       tomorrow,
+      oneWattCostEUR: 0.000206,
+      amountSavedEUR: 0,
       goForItShown: false
     }
   },
@@ -156,6 +158,7 @@ export default {
           ...dev
         }
       })
+      this.updateAmountSavedEUR()
     },
     decrementDeviceWattage(device_id) {
       this.devices = this.devices.map(dev => {
@@ -169,6 +172,12 @@ export default {
           ...dev
         }
       })
+      this.updateAmountSavedEUR()
+    },
+    updateAmountSavedEUR() {
+      const totals = this.devices.map(dev => dev.minutesUse * dev.wattage * this.oneWattCostEUR)
+      const totalCost = totals.reduce((acc, t) => acc + t, 0) / 60
+      this.amountSavedEUR = totalCost
     }
   }
 }
@@ -226,7 +235,7 @@ export default {
           </div>
         </div>
         <div v-if="goForItShown" class="go-for-it-contents border-rounded">
-
+          Decide how long to stop using a particular electric device:
           <div class="card" style="font-size: 0.9em; margin-bottom:1em;" v-for="device in devices">
             <div class="card-body" style="padding: 0.7em !important;">
               <div class="row align-items-center">
@@ -281,7 +290,7 @@ export default {
               <p class="simple-text mt-3">By joining the challenge you can save</p>
           </div>
           <div class="col simple-text mt-3" style="padding-right: 0;">
-              {counter} euros
+              {{ amountSavedEUR }} euros
           </div>
       </div>
 
