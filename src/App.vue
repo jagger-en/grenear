@@ -1,11 +1,11 @@
 <script setup>
 import Notification from './components/Notification.vue'
 import LineChart from './components/LineChart.vue'
-import SmallIcon from './components/icons/smallIcon.vue';
-import PlusIcon from './components/icons/plusIcon.vue';
+import SmallIcon from './components/icons/smallIcon.vue'
+import PlusIcon from './components/icons/plusIcon.vue'
 
-import firebaseConfig from "../firebaseInit";
-import { initializeApp } from "firebase/app";
+import firebaseConfig from '../firebaseInit'
+import { initializeApp } from 'firebase/app'
 import { getFirestore, collection, getDocs, addDoc } from 'firebase/firestore'
 </script>
 
@@ -311,19 +311,34 @@ export default {
 
       <!-- Modal -->
 
-      <div class="modal modal-dialog modal-dialog-centered fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div
+        class="modal modal-dialog modal-dialog-centered fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
         <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+          <div class="modal-content text-center text-justify tone-greenlight">
             <div class="modal-body">
-              ...
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
+              <div class="row align-items-start">
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                  style="padding-left: 1.75em"
+                ></button>
+              </div>
+              <p class="fs-5 mt-3 tone-text-blue">Congratulation!</p>
+              <p class="simple-text">Together with you have manged to save</p>
+              <p class="">{total_wattage_saved} {unit} of electricity.</p>
+              <p class="">{total_joined} people participated</p>
+
+              <!-- TODO: insert image -->
+
+              <p class="simple-text">Share this challenge with others!</p>
+              <button class="btn tone-">Share</button>
             </div>
           </div>
         </div>
@@ -367,7 +382,6 @@ export default {
 </template>
 
 <style>
-
 .go-for-it {
   border-radius: 7px;
   background: #f2ebfffc;
@@ -410,7 +424,7 @@ export default {
   height: 17px;
 }
 
-.how-can-i-help  {
+.how-can-i-help {
   text-align: center;
 }
 
@@ -451,7 +465,6 @@ export default {
   display: flex;
   justify-content: center;
 }
-
 
 .user-select {
   width: 200px;
