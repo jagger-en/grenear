@@ -363,21 +363,26 @@ export default {
                   style="padding-left: 1.75em"
                 ></button>
               </div>
-              <p class="fs-5 mt-3 tone-text-blue">Congratulation!</p>
-              <p class="simple-text">Together with you have manged to save</p>
-              <p class="">{total_wattage_saved} {unit} of electricity.</p>
-              <p class="">{total_joined} people participated</p>
+              <div class="fs-5 mt-3 tone-text-blue">Congratulations!</div>
+                Together with you have manged to save
+                <div>
+                  <span class="tone-text-blue"><b>{{ total_watt_hour_saved / 100000 }} MWh</b></span> of electricity.
+                </div>
+                <div>
+                  <span class="tone-text-blue"><b>{{ total_joined }} people</b></span> participated.
+                </div>
+                <div class="earth-img">
+                  <img src="../public/mother-earth-day.png">
+                </div>
 
-              <!-- TODO: insert image -->
-
-              <p class="simple-text">Share this challenge with others!</p>
-              <button class="btn tone-">Share</button>
+              <p class="simple-text mt-3">Share this challenge with others!</p>
+              <button class="btn btn-sm btn-primary">Share</button>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="container text-center">
+      <!-- <div class="container text-center">
         <div class="row">
           <Notification
             v-for="notification in notifications"
@@ -387,7 +392,7 @@ export default {
             @acceptChallenge="acceptChallenge"
           />
         </div>
-      </div>
+      </div> -->
 
       <div class="container">
         <div v-for="responses_group in responses_groups">
@@ -415,6 +420,16 @@ export default {
 </template>
 
 <style>
+
+.earth-img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.earth-img img {
+  width: 100px;
+}
 
 .watt-save {
   display: flex;
