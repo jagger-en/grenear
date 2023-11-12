@@ -42,7 +42,12 @@ export default {
     })
 
     this.getDevices().then((d) => {
-      this.devices = d
+      this.devices = d.map(dev => {
+        return {
+          ...dev,
+          minutesUse: 0,
+        }
+      })
     })
 
     this.getResponses().then((responses) => {
@@ -138,6 +143,32 @@ export default {
     },
     toggleGoForIt() {
       this.goForItShown = !this.goForItShown
+    },
+    incrementDeviceWattage(device_id) {
+      this.devices = this.devices.map(dev => {
+        if (dev.id == device_id) {
+          return {
+            ...dev,
+            minutesUse: dev.minutesUse + 10
+          }
+        }
+        return {
+          ...dev
+        }
+      })
+    },
+    decrementDeviceWattage(device_id) {
+      this.devices = this.devices.map(dev => {
+        if (dev.id == device_id) {
+          return {
+            ...dev,
+            minutesUse: dev.minutesUse - 10
+          }
+        }
+        return {
+          ...dev
+        }
+      })
     }
   }
 }
@@ -214,9 +245,10 @@ export default {
                     <div class="">
                       <div class="input-group align-items-center">
                         <div class="plus-icon-wrapper">
-                          <MinusIcon class="plus-icon" />
+                          <MinusIcon class="plus-icon" @click="decrementDeviceWattage(device.id)" />
                         </div>
                         <input
+                        :value="device.minutesUse"
                         type="text"
                         class="form-control"
                         placeholder="min"
@@ -224,8 +256,9 @@ export default {
                         aria-describedby="basic-addon1"
                         />
                         <div class="plus-icon-wrapper">
-                          <PlusIcon class="plus-icon" />
+                          <PlusIcon class="plus-icon" @click="incrementDeviceWattage(device.id)" />
                         </div>
+                        mins
                       </div>
                     </div>
                     <div class="col no-margin-no-padding">
@@ -237,7 +270,7 @@ export default {
           </div>
 
           <div class="text-center">
-              <a class="simple-text mt-3 show-more" href="#">Show more</a>
+              <span class="simple-text mt-3 show-more">Show more</span>
           </div>
 
         </div>
