@@ -1,8 +1,9 @@
 <script setup>
 import Notification from './components/Notification.vue'
 import LineChart from './components/LineChart.vue'
-import SmallIcon from './components/icons/smallIcon.vue'
-import PlusIcon from './components/icons/plusIcon.vue'
+import SmallIcon from './components/icons/smallIcon.vue';
+import PlusIcon from './components/icons/plusIcon.vue';
+import MinusIcon from './components/icons/minusIcon.vue';
 
 import firebaseConfig from '../firebaseInit'
 import { initializeApp } from 'firebase/app'
@@ -24,6 +25,7 @@ export default {
       selected_subscriber_id: '',
       responses: [],
       subscribers: [],
+      devices: [],
       todayPretty,
       today,
       tomorrow,
@@ -37,6 +39,10 @@ export default {
 
     this.getSubscribers().then((s) => {
       this.subscribers = s
+    })
+
+    this.getDevices().then((d) => {
+      this.devices = d
     })
 
     this.getResponses().then((responses) => {
@@ -82,6 +88,9 @@ export default {
     },
     async getResponses() {
       return this.getDocs('responses')
+    },
+    async getDevices() {
+      return this.getDocs('devices')
     },
     async getDocs(collection_id) {
       const collection_ref = collection(fs, collection_id)
@@ -187,64 +196,36 @@ export default {
         </div>
         <div v-if="goForItShown" class="go-for-it-contents border-rounded">
 
-          <div class="card" style="font-size: 0.9em; margin-bottom:1em;">
+          <div class="card" style="font-size: 0.9em; margin-bottom:1em;" v-for="device in devices">
             <div class="card-body" style="padding: 0.7em !important;">
               <div class="row align-items-center">
                 <div class="col-5">
                   <div class="row">
-                    <p class="card-title no-margin">Electric device</p>
+                    <p class="card-title no-margin">{{ device.name }}</p>
                   </div>
                   <div class="row">
-                    <p class="card-text text-body-secondary">Wattage</p>
-                  </div>
-                </div>
-                <div class="col-7">
-                  <div class="row">
-                    <div class="col no-margin-no-padding">
-                    </div>
-                    <div class="col-5 no-padding">
-                      <div class="input-group align-items-center">
-                        <input
-                          type="text"
-                          class="form-control"
-                          placeholder="min"
-                          aria-label="minute"
-                          aria-describedby="basic-addon1"
-                        />
-                      </div>
-                    </div>
-                    <div class="col no-margin-no-padding">
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card" style="font-size: 0.9em; margin-bottom:2%;">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-5">
-                  <div class="row">
-                    <p class="card-title no-margin">Electric device</p>
-                  </div>
-                  <div class="row">
-                    <p class="card-text text-body-secondary">Wattage</p>
+                    <p class="card-text text-body-secondary">{{ device.wattage }} Wt</p>
                   </div>
                 </div>
                 <div class="col-7">
                   <div class="row">
                     <div class="col no-margin-no-padding">
                     </div>
-                    <div class="col-5 no-padding">
+                    <div class="">
                       <div class="input-group align-items-center">
+                        <div class="plus-icon-wrapper">
+                          <MinusIcon class="plus-icon" />
+                        </div>
                         <input
-                          type="text"
-                          class="form-control"
-                          placeholder="min"
-                          aria-label="minute"
-                          aria-describedby="basic-addon1"
+                        type="text"
+                        class="form-control"
+                        placeholder="min"
+                        aria-label="minute"
+                        aria-describedby="basic-addon1"
                         />
+                        <div class="plus-icon-wrapper">
+                          <PlusIcon class="plus-icon" />
+                        </div>
                       </div>
                     </div>
                     <div class="col no-margin-no-padding">
