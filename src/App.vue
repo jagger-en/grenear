@@ -35,7 +35,8 @@ export default {
       total_joined: 1658, // pretend there are lots
       total_watt_hour_saved: 1.76 * 1000000,
       total_watt_hour_savable: 5.43 * 1000000,
-      showModal: false
+      showModal: false,
+      showProgress: false
     }
   },
   mounted() {
@@ -191,6 +192,10 @@ export default {
       setTimeout(() => {
         this.showModal = true
       }, "2500");
+
+      setTimeout(() => {
+        this.showProgress = true
+      }, "3000");
     },
     hideModal() {
       this.showModal = false
@@ -355,7 +360,11 @@ export default {
           <div class="col"></div>
       </div>
 
-      <div class="container-fluid">
+      <div v-if="showProgress" class="container-fluid mt-5">
+        <div class="text-center">
+          <h5>Challenge Progress</h5>
+          <p>Challenge lasts until <small><b>{{ today }}</b></small></p>
+        </div>
       <div class="row">
         <div class="col-5 d-flex">
           <div class="card flex-fill">
