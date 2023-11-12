@@ -31,7 +31,10 @@ export default {
       tomorrow,
       oneWattCostEUR: 0.000206,
       amountSavedEUR: 0,
-      goForItShown: false
+      goForItShown: false,
+      total_joined: 1658, // pretend there are lots
+      total_watt_hour_saved: 1.76 * 1000000,
+      total_watt_hour_savable: 5.43 * 1000000
     }
   },
   mounted() {
@@ -120,26 +123,26 @@ export default {
       await addDoc(collection_ref, response)
       window.location.reload()
     },
-    async rejectChallenge(notification_id) {
-      const collection_ref = collection(fs, 'responses')
-      const response = {
-        timestamp: this.getCurrentTimestamp(),
-        notification_id: notification_id,
-        subscriber_id: this.selected_subscriber_id,
-        response_type_id: 'Tg7XLemrnn5BKc33MvrQ'
-      }
+    // async rejectChallenge(notification_id) {
+    //   const collection_ref = collection(fs, 'responses')
+    //   const response = {
+    //     timestamp: this.getCurrentTimestamp(),
+    //     notification_id: notification_id,
+    //     subscriber_id: this.selected_subscriber_id,
+    //     response_type_id: 'Tg7XLemrnn5BKc33MvrQ'
+    //   }
 
-      const matches = this.responses.filter(
-        (r) =>
-          r.notification_id == notification_id &&
-          r.subscriber_id == this.selected_subscriber_id &&
-          r.response_type_id == 'Tg7XLemrnn5BKc33MvrQ'
-      )
-      if (matches.length == 0) {
-        await addDoc(collection_ref, response)
-      }
-      this.notifications = this.notifications.filter((n) => n.id != notification_id)
-    },
+    //   const matches = this.responses.filter(
+    //     (r) =>
+    //       r.notification_id == notification_id &&
+    //       r.subscriber_id == this.selected_subscriber_id &&
+    //       r.response_type_id == 'Tg7XLemrnn5BKc33MvrQ'
+    //   )
+    //   if (matches.length == 0) {
+    //     await addDoc(collection_ref, response)
+    //   }
+    //   this.notifications = this.notifications.filter((n) => n.id != notification_id)
+    // },
     getCurrentTimestamp() {
       return new Date()
     },
@@ -175,9 +178,15 @@ export default {
       this.updateAmountSavedEUR()
     },
     updateAmountSavedEUR() {
-      const totals = this.devices.map(dev => dev.minutesUse * dev.wattage * this.oneWattCostEUR)
-      const totalCost = totals.reduce((acc, t) => acc + t, 0) / 60
+      const totals = this.devices.map(dev => dev.minutesUse * (1/60) * dev.wattage * this.oneWattCostEUR)
+      const totalCost = totals.reduce((acc, t) => acc + t, 0)
       this.amountSavedEUR = totalCost
+    },
+    joinChallenge() {
+      // const totals = this.devices.map(dev => dev.minutesUse * dev.wattage)
+      // const totalCost = totals.reduce((acc, t) => acc + t, 0)
+      // this.total_watt_hour_saved = this.total_watt_hour_saved + 
+      this.total_joined = this.total_joined + 1 // naively increment
     }
   }
 }
@@ -190,16 +199,16 @@ export default {
         <SmallIcon class="brand-icon" />
         One2Line
       </a>
-      <div class="logged-in-as">
+      <!-- <div class="logged-in-as">
         <label class="me-2">Logged in as:</label>
         <select v-model="selected_subscriber_id" class="user-select">
           <option disabled value="">Please select one</option>
           <option :value=subscriber.id v-for="subscriber in subscribers">{{ subscriber.first_name }} {{ subscriber.last_name }}</option>
         </select>
-      </div>
+      </div> -->
     </div>
   </nav>
-  <main class="centering-mobile mt-5">
+  <main class="centering-mobile mt-2">
     <div class="container-mobile">
 
       <div class="forecast border-rounded mb-3">
@@ -244,7 +253,7 @@ export default {
                     <p class="card-title no-margin">{{ device.name }}</p>
                   </div>
                   <div class="row">
-                    <p class="card-text text-body-secondary">{{ device.wattage }} Wt</p>
+                    <p class="card-text text-body-secondary">{{ device.wattage }} W</p>
                   </div>
                 </div>
                 <div class="col-7">
@@ -296,7 +305,7 @@ export default {
 
       <div class="row align-items-center" style="margin: 5% 0;">
           <div class="col"></div>
-          <button class="col-6 btn tone-green simple-text">JOIN THE CHALLENGE!</button>
+          <button class="col-6 btn tone-green simple-text" @click="joinChallenge()">JOIN THE CHALLENGE!</button>
           <div class="col"></div>
       </div>
 
@@ -305,7 +314,7 @@ export default {
           <div class="col-5" style="padding-right: 0; margin-right: 1em !important;">
             <div class="card">
               <div class="card-body text-center">
-                <p class="card-title">{total_joined}</p>
+                <p class="card-title">{{ total_joined }}</p>
                 <p class="card-text simple-text">people have already joined</p>
               </div>
             </div>
@@ -313,17 +322,17 @@ export default {
           <div class="col no-margin-no-padding">
             <div class="card">
               <div class="card-body">
-                  <div class="row">
-                    <div class="col">
-                    </div>
-                    <div class="col">
-                    </div>
+                  <div class="watt-save mb-1">
+                    <small>
+                      {{ total_watt_hour_saved / 1000000 }} MWh saved
+                    </small>
+                    <small>
+                      {{ (total_watt_hour_savable - total_watt_hour_saved) / 1000000 }} MWh left
+                    </small>
                   </div>
-                  <div class="row">
-                    <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="37" aria-valuemin="0" aria-valuemax="100">
-                      <div class="progress-bar tone-green" style="width: 37%"></div>
-                    </div>
-              </div>
+                  <div class="progress" role="progressbar">
+                    <div class="progress-bar tone-green" :style="{width: `${(total_watt_hour_saved / total_watt_hour_savable) * 100}%`}"></div>
+                  </div>
               </div>
             </div>
           </div>
@@ -405,6 +414,12 @@ export default {
 </template>
 
 <style>
+
+.watt-save {
+  display: flex;
+  line-height: 15px;
+}
+
 .go-for-it {
   border-radius: 7px;
   background: #f2ebfffc;
